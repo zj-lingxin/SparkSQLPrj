@@ -27,7 +27,7 @@ object Mail {
     prop.put("mail_bcc", Constant.MAIL_BCC)
     prop.put("mail_to_fraud", Constant.MAIL_TO_FRAUD)
     prop.put("mail_to_score", Constant.MAIL_TO_SCORE)
-    prop.put("mail_to_zhunru", Constant.MAIL_TO_APPROVE)
+    prop.put("mail_to_approve", Constant.MAIL_TO_APPROVE)
     prop.put("mail_to_credit", Constant.MAIL_TO_CREDIT)
     prop.put("mail_to_loan_after", Constant.MAIL_TO_LOAN_AFTER)
   }
