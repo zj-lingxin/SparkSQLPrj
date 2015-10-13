@@ -28,7 +28,7 @@ object Constant {
 
   /** +++++++++++++++++++输出文件的路径+++++++++++++++++++++ */
   //刷单结果路径
-  val PATH_FRAUD_RESULT_PARQUET = Constant.HADOOP_OUTPUT + "/parquet/" + now + "/fraud"
+  val PATH_FRAUD_RESULT_PARQUET = Constant.HADOOP_OUTPUT + s"/parquet/" + now + "/fraud"
   //得分结果路径
   val PATH_SCORE_RESULT_TEXT = Constant.HADOOP_OUTPUT + "/text/" + now + "/score"
   //授信结果路径
