@@ -1,9 +1,9 @@
 package com.asto.dmp.elem.dao
 
-import com.asto.dmp.elem.base.{Constant, BaseContext}
+import com.asto.dmp.elem.base.{Constants, BaseContext}
 
 class CreditDao extends scala.Serializable  {
-  private val sqlContext = BaseContext.getSqlContext()
+  private val sqlContext = BaseContext.getSqlContext
   import sqlContext.implicits._
 
   //定义totalSales = 前12个月销售总额。得到一个数组 Array[(Long, Double)]，数组的元素形如(9631,289431.5)，其中9631是shop_id,289431.5是近12个月的销售总额
@@ -32,7 +32,7 @@ class CreditDao extends scala.Serializable  {
 
   def shuadanRate = {
     //授信结果路径
-    sqlContext.read.parquet(Constant.PATH_FRAUD_RESULT_PARQUET).registerTempTable("shuadan")
+    sqlContext.read.parquet(Constants.OutputPath.FRAUD_PARQUET).registerTempTable("shuadan")
     sqlContext.sql("select * from shuadan").map(t => Pair[String, Double](t(0).toString, if (t(1) == null) 0D else t(1).toString.toDouble))
   }
 }

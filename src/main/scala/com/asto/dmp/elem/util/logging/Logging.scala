@@ -1,6 +1,6 @@
 package com.asto.dmp.elem.util.logging
 
-import com.asto.dmp.elem.base.Constant
+import com.asto.dmp.elem.base.Constants
 import org.apache.log4j.PropertyConfigurator
 import org.slf4j.impl.StaticLoggerBinder
 import org.slf4j.{Logger, LoggerFactory}
@@ -21,47 +21,47 @@ trait Logging {
     _log
   }
 
-  protected def info(msg: => String) {
+  protected def logInfo(msg: => String) {
     if (log.isInfoEnabled) log.info(msg)
   }
 
-  protected def debug(msg: => String) {
+  protected def logDebug(msg: => String) {
     if (log.isDebugEnabled) log.debug(msg)
   }
 
-  protected def trace(msg: => String) {
+  protected def logTrace(msg: => String) {
     if (log.isTraceEnabled) log.trace(msg)
   }
 
-  protected def warn(msg: => String) {
+  protected def logWarn(msg: => String) {
     if (log.isWarnEnabled) log.warn(msg)
   }
 
-  protected def error(msg: => String) {
+  protected def logError(msg: => String) {
     if (log.isErrorEnabled) log.error(msg)
   }
 
-  protected def info(msg: => String, throwable: Throwable) {
+  protected def logInfo(msg: => String, throwable: Throwable) {
     if (log.isInfoEnabled) log.info(msg, throwable)
   }
 
-  protected def debug(msg: => String, throwable: Throwable) {
+  protected def logDebug(msg: => String, throwable: Throwable) {
     if (log.isDebugEnabled) log.debug(msg, throwable)
   }
 
-  protected def trace(msg: => String, throwable: Throwable) {
+  protected def logTrace(msg: => String, throwable: Throwable) {
     if (log.isTraceEnabled) log.trace(msg, throwable)
   }
 
-  protected def warn(msg: => String, throwable: Throwable) {
+  protected def logWarn(msg: => String, throwable: Throwable) {
     if (log.isWarnEnabled) log.warn(msg, throwable)
   }
 
-  protected def error(msg: => String, throwable: Throwable) {
+  protected def logError(msg: => String, throwable: Throwable) {
     if (log.isErrorEnabled) log.error(msg, throwable)
   }
 
-  protected def isTraceEnabled(): Boolean = {
+  protected def isTraceEnabled: Boolean = {
     log.isTraceEnabled
   }
 
@@ -80,7 +80,7 @@ trait Logging {
 
     val usingLog4j12 = "org.slf4j.impl.Log4jLoggerFactory".equals(binderClass)
     if (usingLog4j12) {
-      val defaultLogProps = Constant.DEFAULT_LOG_PROPS
+      val defaultLogProps = Constants.App.DEFAULT_LOG_PROPS
       Option(getClass.getClassLoader.getResource(defaultLogProps)) match {
         case Some(url) =>
           PropertyConfigurator.configure(url)

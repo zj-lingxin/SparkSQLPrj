@@ -22,17 +22,17 @@ class MailAgent(mail: Mail) {
   def sendMessage() = {
     println("******************************** 邮件信息：" + mail + "********************************")
     message.setFrom(new InternetAddress(mail.from))
-    setToCcBccRecipients
+    setToCcBccRecipients()
     message.setSentDate(new Date())
     message.setSubject(mail.subject)
     message.setText(mail.context,"UTF-8")
     val transport = session.getTransport("smtp")
     transport.connect(mail.smtpHost, mail.from, mail.password)
-    transport.sendMessage(message, message.getAllRecipients())
+    transport.sendMessage(message, message.getAllRecipients)
   }
 
   // throws AddressException, MessagingException
-  private def setToCcBccRecipients {
+  private def setToCcBccRecipients() {
     setMessageRecipients(mail.to, Message.RecipientType.TO)
     if (mail.cc != null && "".ne(mail.cc)) {
       setMessageRecipients(mail.cc, Message.RecipientType.CC)
@@ -54,7 +54,7 @@ class MailAgent(mail: Mail) {
   // throws AddressException
   private def buildInternetAddressArray(address: String): Array[InternetAddress] = {
     // could test for a null or blank String but I'm letting parse just throw an exception
-    return InternetAddress.parse(address)
+    InternetAddress.parse(address)
   }
 }
 

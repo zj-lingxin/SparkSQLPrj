@@ -24,7 +24,7 @@ object DateUtils {
    * 获取当前系统日期。
    * 格式是"yyyy-MM-dd HH:mm:ss"
    */
-  def getStrDate(): String = getStrDate("yyyy-MM-dd HH:mm:ss")
+  def getStrDate: String = getStrDate("yyyy-MM-dd HH:mm:ss")
 
   /**
    * 倒推出m天之前的日期，并以formatText格式以字符串形式输出
@@ -53,21 +53,21 @@ object DateUtils {
   /**
    * 获取当前年份
    */
-  def getCurrYear(): Int = {
-    return df.get(Calendar.YEAR)
+  def getCurrYear: Int = {
+    df.get(Calendar.YEAR)
   }
 
   /**
    * 获取当前月份
    */
-  def getCurrMonth(): Int = {
-    return df.get(Calendar.MONTH) + 1
+  def getCurrMonth: Int = {
+    df.get(Calendar.MONTH) + 1
   }
 
   /**
    * 获取当前日
    */
-  def getCurrDate(): Int = {
-    return df.get(Calendar.DATE)
+  def getCurrDate: Int = {
+    df.get(Calendar.DATE)
   }
 }

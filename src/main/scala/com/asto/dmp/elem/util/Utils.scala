@@ -1,6 +1,5 @@
 package com.asto.dmp.elem.util
 
-import com.asto.dmp.elem.base.{Constant, BaseContext}
 import org.apache.spark.rdd.RDD
 import scala.reflect.ClassTag
 /**
@@ -24,21 +23,21 @@ object Utils {
   class RichPairRDD[K: Ordering : ClassTag, V](rdd: RDD[_ <: Product2[K, V]]) {
     //对元素是二元组的RDD按Key排序后打印出来
     def sortAndPrint(ascending: Boolean = true): Unit = {
-      rdd.sortBy(t => t._1, ascending).collect.foreach(println)
+      rdd.sortBy(t => t._1, ascending).collect().foreach(println)
     }
 
-    def sortAndPrint: Unit = sortAndPrint(true)
+    def sortAndPrint(): Unit = sortAndPrint(true)
 
   }
 
-  implicit def rdd2RichPairRDD[K: Ordering : ClassTag, V](rdd: RDD[_ <: Product2[K, V]]) = new RichPairRDD(rdd)
+  implicit def rdd2RichPairRDD[K: Ordering : ClassTag, V](rdd: RDD[_ <: Product2[K, V]]): RichPairRDD[K, V] = new RichPairRDD(rdd)
 
   class RichRDD[T](rdd: RDD[T]) {
     //打印RDD的每个元素
-    def print: Unit = {
-      rdd.collect.foreach(println)
+    def print(): Unit = {
+      rdd.collect().foreach(println)
     }
   }
   
-  implicit def rdd2RichRDD[T](rdd: RDD[T]) = new RichRDD(rdd)
+  implicit def rdd2RichRDD[T](rdd: RDD[T]): RichRDD[T] = new RichRDD(rdd)
 }

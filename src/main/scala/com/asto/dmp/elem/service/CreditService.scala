@@ -14,22 +14,22 @@ class CreditService extends DataSource with scala.Serializable with Logging {
   def run(): Unit = {
     try {
 
-      FileUtils.deleteHdfsFile(Constant.PATH_CREDIT_RESULT_TEXT)
-      FileUtils.deleteHdfsFile(Constant.PATH_CREDIT_RESULT_PARQUET)
+      FileUtils.deleteHdfsFile(Constants.OutputPath.CREDIT_TEXT)
+      FileUtils.deleteHdfsFile(Constants.OutputPath.CREDIT_PARQUET)
 
-      val sc = BaseContext.getSparkContext()
+      val sc = BaseContext.getSparkContext
       val creditDao = new CreditDao()
 
-      CreditTable.registerTradeView
+      CreditTable.registerTradeView()
       val totalSales = creditDao.totalSales
 
-      CreditTable.registerBeta
+      CreditTable.registerBeta()
       val betaInfo = creditDao.betaInfo
 
-      CreditTable.registerShop
+      CreditTable.registerShop()
       val shopInfo = creditDao.shopInfo
 
-      CreditTable.registerRefundInfo
+      CreditTable.registerRefundInfo()
       val refundRate = creditDao.refundRate
 
       //val shuadanRate = creditDao.shuadanRate
@@ -61,10 +61,10 @@ class CreditService extends DataSource with scala.Serializable with Logging {
       // =>  (shop_id,([(销售总额-大型活动销售额)*(1-刷单比率)],大型活动销售额,刷单比率))
       // 例如 (   7000,(                    1.6285419374400008E7,       10000.0,    0.12))
       val minusClickFarmingSales = minusBigEventSales.leftOuterJoin(shuadanRate).map { t =>
-        if (t._2._2 == None || t._2._2.get <= 0.1)
+        if (t._2._2.isEmpty || t._2._2.get <= 0.1)
           Pair[String, ((Double, Double), (Double, Double))](t._1, (t._2._1, (1, t._2._2.getOrElse(0))))
         else
-          Pair[String, ((Double, Double), (Double, Double))](t._1, (t._2._1, ((1 - t._2._2.get), t._2._2.get)))
+          Pair[String, ((Double, Double), (Double, Double))](t._1, (t._2._1, (1 - t._2._2.get, t._2._2.get)))
       }.map(t => (t._1, (t._2._1._1 * t._2._2._1, t._2._1._2, t._2._2._2)))
 
       // (shop_id,([(销售总额-大型活动销售额)*(1-刷单比率)],大型活动销售额,刷单比率))   //minusClickFarmingSales
@@ -129,13 +129,13 @@ class CreditService extends DataSource with scala.Serializable with Logging {
       val result = totalSales.map(t => (t._1, (t._2, t._2 / 12 * 1.5))).leftOuterJoin(tmpResult).map( t => (t._1, t._2._1._1, t._2._2.get._1, t._2._2.get._2, t._2._2.get._3, t._2._2.get._4,
         t._2._2.get._5, t._2._1._2, t._2._2.get._6, t._2._2.get._7, t._2._2.get._10, t._2._2.get._11, Array(t._2._1._2, t._2._2.get._8).min))
       result.toDF("shop_id", "前12个月销售总额", "resultSales", "β", "行业类型", "得分", "resultSales*β/12*授信月份数",
-        "前12个月销售总额/12*1.5", "行业风险限额", "产品限额", "刷单比率", "退款率", "授信额度").write.parquet(Constant.PATH_CREDIT_RESULT_PARQUET)
-      result.map(_.productIterator.mkString(",")).coalesce(1, true).saveAsTextFile(Constant.PATH_CREDIT_RESULT_TEXT)
+        "前12个月销售总额/12*1.5", "行业风险限额", "产品限额", "刷单比率", "退款率", "授信额度").write.parquet(Constants.OutputPath.CREDIT_PARQUET)
+      result.map(_.productIterator.mkString(",")).coalesce(1, shuffle = true).saveAsTextFile(Constants.OutputPath.CREDIT_TEXT)
 
     } catch {
       case t: Throwable =>
-        MailAgent(t, Constant.MAIL_CREDIT_SUBJECT, Mail.getPropByKey("mail_to_credit")).sendMessage()
-        error(Constant.MAIL_CREDIT_SUBJECT, t)
+        MailAgent(t, Constants.Mail.CREDIT_SUBJECT, Mail.getPropByKey("mail_to_credit")).sendMessage()
+        logError(Constants.Mail.CREDIT_SUBJECT, t)
     }
   }
 }

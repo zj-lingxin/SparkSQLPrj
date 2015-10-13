@@ -3,7 +3,7 @@ package com.asto.dmp.elem.util.mail
 import java.io.FileInputStream
 import java.util.Properties
 
-import com.asto.dmp.elem.base.Constant
+import com.asto.dmp.elem.base.Constants
 
 object Mail {
   private val prop = new Properties()
@@ -18,18 +18,18 @@ object Mail {
   if (hasPropPath) {
     prop.load(new FileInputStream(propPath))
   } else {
-    prop.put("mail_to", Constant.MAIL_TO)
-    prop.put("mail_from", Constant.MAIL_FROM)
-    prop.put("mail_password", Constant.MAIL_PASSWORD)
-    prop.put("mail_smtpHost", Constant.MAIL_SMTPHOST)
-    prop.put("mail_subject", Constant.MAIL_SUBJECT)
-    prop.put("mail_cc", Constant.MAIL_CC)
-    prop.put("mail_bcc", Constant.MAIL_BCC)
-    prop.put("mail_to_fraud", Constant.MAIL_TO_FRAUD)
-    prop.put("mail_to_score", Constant.MAIL_TO_SCORE)
-    prop.put("mail_to_approve", Constant.MAIL_TO_APPROVE)
-    prop.put("mail_to_credit", Constant.MAIL_TO_CREDIT)
-    prop.put("mail_to_loan_after", Constant.MAIL_TO_LOAN_AFTER)
+    prop.put("mail_to", Constants.Mail.TO)
+    prop.put("mail_from", Constants.Mail.FROM)
+    prop.put("mail_password", Constants.Mail.PASSWORD)
+    prop.put("mail_smtpHost", Constants.Mail.SMTPHOST)
+    prop.put("mail_subject", Constants.Mail.SUBJECT)
+    prop.put("mail_cc", Constants.Mail.CC)
+    prop.put("mail_bcc", Constants.Mail.BCC)
+    prop.put("mail_to_fraud", Constants.Mail.TO_FRAUD)
+    prop.put("mail_to_score", Constants.Mail.TO_SCORE)
+    prop.put("mail_to_approve", Constants.Mail.TO_APPROVE)
+    prop.put("mail_to_credit", Constants.Mail.TO_CREDIT)
+    prop.put("mail_to_loan_after", Constants.Mail.TO_LOAN_AFTER)
   }
 
   def getPropByKey(propertyKey: String): String = {
@@ -124,7 +124,7 @@ class Mail(var privateContext: String, var subject: String = Mail.getPropByKey("
     this
   }
 
-  override def toString(): String = {
+  override def toString: String = {
     s"\nto:$to\nsubject:$subject\nfrom:$from\npassword:$password \nsmtpHost:$smtpHost\ncc:$cc\nbcc:$bcc \n"
   }
 }
