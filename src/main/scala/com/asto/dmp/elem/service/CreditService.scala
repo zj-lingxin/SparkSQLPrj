@@ -130,7 +130,7 @@ class CreditService extends DataSource with scala.Serializable with Logging {
         t._2._2.get._5, t._2._1._2, t._2._2.get._6, t._2._2.get._7, t._2._2.get._10, t._2._2.get._11, Array(t._2._1._2, t._2._2.get._8).min))
       result.toDF("shop_id", "前12个月销售总额", "resultSales", "β", "行业类型", "得分", "resultSales*β/12*授信月份数",
         "前12个月销售总额/12*1.5", "行业风险限额", "产品限额", "刷单比率", "退款率", "授信额度").write.parquet(Constants.OutputPath.CREDIT_PARQUET)
-      result.map(_.productIterator.mkString(",")).coalesce(1, shuffle = true).saveAsTextFile(Constants.OutputPath.CREDIT_TEXT)
+      result.map(_.productIterator.mkString(",")).coalesce(1, shuffle = false).saveAsTextFile(Constants.OutputPath.CREDIT_TEXT)
 
     } catch {
       case t: Throwable =>
